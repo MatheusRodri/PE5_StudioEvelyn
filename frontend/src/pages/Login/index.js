@@ -14,15 +14,39 @@ export default function Login() {
   const nav = useNavigate();
 
 
- 
-  useEffect(() => {
-    const cachedUser = JSON.parse(localStorage.getItem('usuario'));
-    if (cachedUser) {
-      setUsuario(cachedUser);
-      nav('/agendamentos');
+  const handleLogin = async (e) => {
+  
+
+    e.preventDefault();
+    try {
+      const response = await fetch('http://localhost:5000/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          EMAIL: email,
+          SENHA: password
+        }),
+      });
+
+      if (response.ok) {
+        const data = await response.json(); // <-- transforma em objeto JS
+
+        console.log('Dados recebidos:', data);
+
+        // Armazena no cache (localStorage)
+        localStorage.setItem('usuario',data[0].NOME);
+        localStorage.setItem('CPF', data[0].CPF);
+        localStorage.setItem('ID', data[0].ID);
+       nav('/agendamentos')
+     }
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+    catch (error) {
+      console.error('Erro ao fazer login:', error);
+    }
+}
+
 
   return (
     <>
@@ -30,7 +54,7 @@ export default function Login() {
       <main className='login-page'>
         <section className='login-container'>
           <h2 style={{ fontFamily: 'Arial, sans-serif' }}>LOGIN</h2>
-          <form id='login-form' onSubmit={()=>{}}>
+          <form id='login-form' onSubmit={handleLogin}>
             <input
               onChange={(e) => setEmail(e.target.value)}
               value={email}

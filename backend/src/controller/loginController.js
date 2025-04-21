@@ -18,6 +18,7 @@ servidor.post('/cliente', async (req, res) => {
 // Rota para realizar login
 servidor.post('/login', async (req, res) => {
     try {
+        console.log(req.body)
         const log = req.body; 
         const cliente = await login(log);
         console.log(cliente);

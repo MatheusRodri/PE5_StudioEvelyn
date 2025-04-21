@@ -24,6 +24,19 @@ export default function Registro() {
       return
     } else {
       try {
+
+        const response = await fetch('http://localhost:5000/registro', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            NOME: nome,
+            EMAIL: email,
+            SENHA: password
+          }),
+        });
+        
        
 
       } catch (e) {

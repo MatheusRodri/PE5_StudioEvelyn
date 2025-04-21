@@ -8,6 +8,7 @@ import { Link, useNavigate } from 'react-router-dom';
 function AgendamentoDetalhe() {
   const [usuario, setUsuario] = useState({});
   const [dados, setDados] = useState([]);
+  const [nomeUser, setNomeUser] = useState('');
   const nav = useNavigate();
 
   document.addEventListener('keydown', function (event) {
@@ -33,13 +34,18 @@ function AgendamentoDetalhe() {
   }
 
   const carregarAgendamentoUser = async () => {
+    console.log('carregarAgendamentoUser')
     try {
-      const response = await axios.get(`http://127.0.0.1:5000/agendamentos/cliente/${usuario.email}`)
-      setDados(response.data)
+      console.log('carregarAgendamentoUser2')
+      const cpf = localStorage.getItem('CPF');
+      console.log(cpf)
+      const response = await axios.get(`http://localhost:5000/agendamentos/cliente/${cpf}`); // <-- CPF na rota
+      setDados(response.data);
     } catch (error) {
       console.error('Erro ao carregar agendamentos:', error);
     }
   };
+
 
   const carregarTodosAgendamentos = async () => {
     try {
@@ -51,13 +57,9 @@ function AgendamentoDetalhe() {
   };
 
   useEffect(() => {
-    console.log(usuario);
-    if (usuario && usuario.permissao === 1) {
-      carregarTodosAgendamentos();
-    } else {
+    setNomeUser(localStorage.getItem('usuario'));
       carregarAgendamentoUser();
-    }
-  }, [usuario]);
+  }, []);
 
   function converteData(data) {
     const newDate = new Date(data);
@@ -74,7 +76,7 @@ function AgendamentoDetalhe() {
       <main className='main'>
         <h2>Detalhes dos Agendamentos</h2>
         <div className='nomeEbotao'>
-          <p className='nameUser'>{verificaHorario() + " " + (usuario.displayName || '')}<span onClick={handleLoggout}>Sair</span> </p>
+          <p className='nameUser'>{verificaHorario() + " " + (nomeUser || '')}<span onClick={handleLoggout}>Sair</span> </p>
           <button className='buttonAgendar'>
             <Link to="/agendamento">Agendar</Link>
           </button>
@@ -85,7 +87,7 @@ function AgendamentoDetalhe() {
           ) : (
             usuario.permissao === 1 ? (
               dados.map((agendamento) => (
-                <div className="detalhe-container" key={agendamento.id}>
+                <div className="detalhe-container" key={agendamento.ID_AGENDAMENTO}>
                   <p><strong>Nome:</strong> {agendamento.NOME}</p>
                   <p><strong>Serviço:</strong> {agendamento.PROCEDIMENTO}</p>
                   <p><strong>Data:</strong> {converteData(agendamento.DATA)}</p>
