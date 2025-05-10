@@ -21,6 +21,7 @@ export async function criarCliente(cliente) {
 }
 
 export async function login(login) {
+    console.log("Login2",login);
     try {
         const comando = `SELECT 
                             *
@@ -28,7 +29,9 @@ export async function login(login) {
                         WHERE EMAIL = ? AND SENHA = ?`
             ;
         const valores = [login.EMAIL, login.SENHA];
+        console.log("Valores",valores);
         const resp = await con.query(comando, valores);
+        console.log("Resp",resp);
         return resp[0];
 
     } catch (error) {

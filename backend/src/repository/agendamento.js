@@ -37,8 +37,8 @@ export async function criarAgendamento(agendamento) {
 // Função para exibir um agendamento de um cliente por CPF
 export async function exibirAgendamentoCliente(cpf) {
     try {
-        const query = `SELECT * FROM VM_CLIENTES_AGENDAMENTOS WHERE CPF = ?`;
-
+        const query = `SELECT * FROM VM_CLIENTES_AGEDAMENTOS WHERE CPF = ?`;
+        console.log("cpf", cpf);
         let resp = await con.query(query, cpf);
         console.log(resp[0])
         return resp[0];

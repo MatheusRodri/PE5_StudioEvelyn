@@ -58,7 +58,7 @@ function Agendamento() {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          CPF: "123",
+          CPF: cachedProcedimento.cpf,
           NOME: cachedProcedimento.displayName,
           EMAIL: cachedProcedimento.email,
           DATA: cachedProcedimento.dataMarca,
@@ -108,11 +108,7 @@ function Agendamento() {
       console.log("check", check);
       localStorage.setItem('procedimento', JSON.stringify(check));
 
-      const { data } = await axios.post(process.env.REACT_APP_API_URL + "/create-checkout-session", {
-        procedimentos
-      });
 
-      window.location.href = data.url;
     } catch (error) {
       console.error('Erro ao finalizar compra:', error);
     }
